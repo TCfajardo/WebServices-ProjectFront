@@ -4,8 +4,10 @@
     <form @submit.prevent="submitForm" style="margin: 0px;">
       <div class="form-group">
         <label for="licensePlate" class="label">Placa:</label>
-        <input type="text" id="licensePlate" v-model="vehicle.licensePlate" required @input="validateLicensePlate" class="input" maxlength="6">
-        <p v-if="licensePlateError" class="error">La placa debe tener el formato XXXNNN<br> X es un caracter alfabético y N es un número.</p>
+        <input type="text" id="licensePlate" v-model="vehicle.licensePlate" required @input="validateLicensePlate"
+          class="input" maxlength="6">
+        <p v-if="licensePlateError" class="error">La placa debe tener el formato XXXNNN<br> X es un caracter alfabético y
+          N es un número.</p>
       </div>
       <div class="form-group">
         <label for="color" class="label">Color:</label>
@@ -20,6 +22,8 @@
       <div style="text-align: center; margin-top: 20px;">
         <button type="submit" class="button">Registrar</button>
       </div>
+      <label v-if="errorMessage" class="error">{{ errorMessage }}</label>
+      <label v-if="successMessage" class="success">{{ successMessage }}</label>
     </form>
   </div>
 </template>
@@ -37,6 +41,8 @@ export default {
         carPhoto: null
       },
       licensePlateError: false,
+      errorMessage: '', // Inicialización de errorMessage
+      successMessage: '', // Inicialización de successMessage
       colors: [
         { id: 1, name: 'Rojo' },
         { id: 2, name: 'Azul' },
@@ -73,19 +79,24 @@ export default {
       if (
         !this.vehicle.licensePlate ||
         !this.vehicle.color ||
-
         !this.vehicle.carPhoto
       ) {
         this.errorMessage = 'Todos los datos del vehículo son obligatorios';
-        return; 
+        this.successMessage = ''; // Limpiar el mensaje de éxito si está presente
+        return;
       }
       try {
         const response = await axios.post('http://localhost:3000/cars', this.vehicle);
         console.log('Respuesta del servidor:', response.data);
+        this.successMessage = 'El vehículo se registró correctamente'; // Mostrar mensaje de éxito
+        this.errorMessage = ''; // Limpiar el mensaje de error si está presente
       } catch (error) {
         console.error('Error al enviar los datos del vehículo:', error);
+        this.errorMessage = 'Hubo un error al registrar el vehículo'; // Mostrar mensaje de error
+        this.successMessage = ''; // Limpiar el mensaje de éxito si está presente
       }
-    },
+    }
+    ,
   }
 }
 </script>
@@ -95,7 +106,7 @@ export default {
   display: inline-block;
   width: 100px;
   text-align: left;
-  
+
 }
 
 .input {
