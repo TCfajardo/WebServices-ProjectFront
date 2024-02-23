@@ -6,3 +6,16 @@
     transform: translateY(10px);
     opacity: 0;
   }
+  button {
+    margin: 5px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #1c0043;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  button:hover { 
+    background-color: rgb(80, 95, 193); } 

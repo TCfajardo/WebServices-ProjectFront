@@ -1,16 +1,18 @@
 <template>
   <div id="app">
     <h1>Parqueadero NN</h1>
-    <button @click="showRegistrationForm = true">Registrar vehículo</button>
-    <button @click="showRetrievalForm = true">Retirar vehículo</button>
-    <button @click="getVehicles">Obtener vehículos</button>
+    <img src="https://img.freepik.com/vector-premium/diseno-plantilla-logotipo-coche-estacionamiento_20029-1033.jpg" alt="Carro" class="car-image">
+    <nav>
+      <button @click="showRegistrationForm = true">Registrar vehículo</button>
+      <button @click="showRetrievalForm = true">Retirar vehículo</button>
+      <button @click="getVehicles">Obtener vehículos</button>
+      
+    </nav>
 
-    <transition name="slide-down">
-      <div class="form-container" v-if="showRegistrationForm || showRetrievalForm">
-        <vehicle-registration-form v-if="showRegistrationForm" @close="showRegistrationForm = false"></vehicle-registration-form>
-        <vehicle-retrieval-form v-if="showRetrievalForm" @close="showRetrievalForm = false"></vehicle-retrieval-form>
-      </div>
-    </transition>
+    <div class="form-container" v-if="showRegistrationForm || showRetrievalForm">
+      <vehicle-registration-form v-if="showRegistrationForm" @close="showRegistrationForm = false"></vehicle-registration-form>
+      <vehicle-retrieval-form v-if="showRetrievalForm" @close="showRetrievalForm = false"></vehicle-retrieval-form>
+    </div>
 
     <pre v-if="vehicles.length > 0">{{ vehicles }}</pre>
   </div>
@@ -63,31 +65,43 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #00152a;
   margin-top: 60px;
+  background-color: #ffffff;
 }
 
 button {
-  margin: 10px;
+  margin: 5px;
   padding: 10px;
   border: none;
   border-radius: 5px;
-  background-color: #4CAF50;
+  background-color: #1c0043;
   color: white;
   font-size: 16px;
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #1c0043;
+button:hover { 
+  background-color: rgb(80, 95, 193); } 
+
+pre { margin: 20px 0; 
+  padding: 10px; 
+  border: 1px solid #ccc; 
+  border-radius: 5px; 
+  background-color: #f5f5f5; 
+  white-space: pre-wrap; } 
+
+nav{
+  flex-direction: row;
+  justify-content: space-between; 
+  align-items: center;
+  margin-top: -10px;
 }
 
-pre {
-  margin: 20px 0;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f5f5f5;
-  white-space: pre-wrap;
-}
+.car-image { 
+  width: 120px; 
+  height: auto; 
+  margin-top: -15px;
+} 
+
 </style>
