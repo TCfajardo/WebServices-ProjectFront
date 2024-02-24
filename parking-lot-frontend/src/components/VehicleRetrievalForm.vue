@@ -34,10 +34,21 @@
 
 .form-container {
   margin-top: 30px;
-  width: 60%;
+  width: 70%;
   margin-left: auto;
   margin-right: auto;
   border-radius: 2%;
+}
+
+.label {
+  display: inline-block;
+  width: 100px;
+  text-align: left;
+}
+
+.input {
+  width: calc(100% - 290px);
+  margin-left: 10px;
 }
 
 </style>

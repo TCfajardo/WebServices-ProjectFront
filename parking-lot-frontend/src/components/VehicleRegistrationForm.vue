@@ -151,7 +151,7 @@ export default {
 
 .form-container {
   margin-top: 30px;
-  width: 80%;
+  width: 70%;
   margin-left: auto;
   margin-right: auto;
   border-radius: 2%;
