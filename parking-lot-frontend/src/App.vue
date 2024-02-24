@@ -3,10 +3,9 @@
     <h1>Parqueadero NN</h1>
     <img src="https://img.freepik.com/vector-premium/diseno-plantilla-logotipo-coche-estacionamiento_20029-1033.jpg" alt="Carro" class="car-image">
     <nav>
-      <button @click="showRegistrationForm = true">Registrar vehículo</button>
-      <button @click="showRetrievalForm = true">Retirar vehículo</button>
+      <button @click="showRegistrationForm = true; showRetrievalForm = false">Registrar vehículo</button>
+      <button @click="showRetrievalForm = true; showRegistrationForm = false">Retirar vehículo</button>
       <button @click="getVehicles">Obtener vehículos</button>
-      
     </nav>
 
     <div class="form-container" v-if="showRegistrationForm || showRetrievalForm">

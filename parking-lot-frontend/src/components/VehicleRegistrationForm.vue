@@ -6,8 +6,6 @@
         <label for="license_plate" class="label">Placa:</label>
         <input type="text" id="license_plate" v-model="vehicle.license_plate" required @input="validateLicensePlate"
           class="input" maxlength="7">
-        <p v-if="licensePlateError" class="error">La placa debe tener el formato XXX-NNN<br> X es un caracter alfabético y
-          N es un número.</p>
       </div>
       <div class="form-group">
         <label for="color" class="label">Color:</label>
@@ -17,7 +15,7 @@
       </div>
       <div class="form-group">
         <label for="carPhoto" class="label">Foto del vehículo:</label>
-        <input type="file" id="carPhoto" @change="handleFileChange" required class="input">
+        <input type="file" id="carPhoto" @change="validateCarPhoto" required class="input">
       </div>
       <div style="text-align: center; margin-top: 20px;">
         <button type="submit" class="button">Registrar</button>
@@ -40,7 +38,7 @@ export default {
         state: 'ACTIVO',
         carPhoto: null
       },
-      licensePlateError: false,
+      
       errorMessage: '', // Inicialización de errorMessage
       successMessage: '', // Inicialización de successMessage
       colors: [
@@ -72,50 +70,60 @@ export default {
       this.vehicle.carPhoto = event.target.files[0];
     },
     validateLicensePlate() {
+      this.vehicle.license_plate = this.vehicle.license_plate.slice(0, 3).toUpperCase() + this.vehicle.license_plate.slice(3);
       const regex = /^[A-Z]{3}-[0-9]{3}$/;
       this.licensePlateError = !regex.test(this.vehicle.licensePlate);
+
+    },
+    validateCarPhoto(event) {
+      const file = event.target.files[0];
+      const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+      if (!allowedExtensions.exec(file.name)) {
+        this.errorMessage = 'El archivo seleccionado no es una imagen válida. Por favor, selecciona un archivo de imagen.';
+        this.successMessage = '';
+        event.target.value = ''; 
+        this.vehicle.carPhoto = null; 
+      } else {
+        this.errorMessage = '';
+        this.vehicle.carPhoto = file;
+      }
     },
     async submitForm() {
-  // Verificar si todos los campos están llenos
-  if (
-    !this.vehicle.license_plate || // Verifica si la placa está vacía
-    !this.vehicle.color ||
-    !this.vehicle.carPhoto
-  ) {
-    this.errorMessage = 'Todos los datos del vehículo son obligatorios';
-    this.successMessage = ''; // Limpiar el mensaje de éxito si está presente
-    return;
-  }
+      if (
+        !this.vehicle.license_plate || 
+        !this.vehicle.color ||
+        !this.vehicle.carPhoto
+      ) {
+        this.errorMessage = 'Todos los datos del vehículo son obligatorios';
+        this.successMessage = '';
+        return;
+      }
 
-  // Validar la placa ingresada
-  const plateParts = this.vehicle.license_plate.split('-');
-  if (plateParts.length !== 2 || plateParts[0].length !== 3 || plateParts[1].length !== 3) {
-    this.errorMessage = 'La placa debe tener el formato XXX-NNN (3 letras seguidas de un guion y 3 números)';
-    this.successMessage = ''; // Limpiar el mensaje de éxito si está presente
-    return;
-  }
+      const plateParts = this.vehicle.license_plate.split('-');
+      if (plateParts.length !== 2 || plateParts[0].length !== 3 || plateParts[1].length !== 3) {
+        this.errorMessage = 'La placa debe tener el formato XXX-NNN (3 letras seguidas de un guion y 3 números)';
+        this.successMessage = ''; 
+        return;
+      }
+      const regexLetters = /^[A-Z]{3}$/;
+      const regexNumbers = /^[0-9]{3}$/;
+      if (!regexLetters.test(plateParts[0]) || !regexNumbers.test(plateParts[1])) {
+        this.errorMessage = 'La placa debe tener el formato XXX-NNN (3 letras seguidas de un guion y 3 números)';
+        this.successMessage = ''; 
+        return;
+      }
 
-  // Validar que las letras estén en mayúsculas y los números sean válidos
-  const regexLetters = /^[A-Z]{3}$/;
-  const regexNumbers = /^[0-9]{3}$/;
-  if (!regexLetters.test(plateParts[0]) || !regexNumbers.test(plateParts[1])) {
-    this.errorMessage = 'La placa debe tener el formato XXX-NNN (3 letras seguidas de un guion y 3 números)';
-    this.successMessage = ''; // Limpiar el mensaje de éxito si está presente
-    return;
-  }
-
-  // Si todo es válido, enviar la solicitud al backend para registrar el vehículo
-  try {
-    const response = await axios.post('http://localhost:3000/cars', this.vehicle);
-    console.log('Respuesta del servidor:', response.data);
-    this.successMessage = 'El vehículo se registró correctamente'; // Mostrar mensaje de éxito
-    this.errorMessage = ''; // Limpiar el mensaje de error si está presente
-  } catch (error) {
-    console.error('Error al enviar los datos del vehículo:', error);
-    this.errorMessage = 'Hubo un error al registrar el vehículo'; // Mostrar mensaje de error
-    this.successMessage = ''; // Limpiar el mensaje de éxito si está presente
-  }
-}
+      try {
+        const response = await axios.post('http://localhost:3000/cars', this.vehicle);
+        console.log('Respuesta del servidor:', response.data);
+        this.successMessage = 'El vehículo se registró correctamente';
+        this.errorMessage = ''; 
+      } catch (error) {
+        console.error('Error al enviar los datos del vehículo:', error);
+        this.errorMessage = 'Hubo un error al registrar el vehículo';
+        this.successMessage = '';
+      }
+    }
 
     ,
   }
@@ -143,7 +151,7 @@ export default {
 
 .form-container {
   margin-top: 30px;
-  width: 42%;
+  width: 80%;
   margin-left: auto;
   margin-right: auto;
   border-radius: 2%;

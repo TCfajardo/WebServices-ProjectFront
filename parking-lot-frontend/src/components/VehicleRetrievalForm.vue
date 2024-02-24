@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="form-container slide-down" style="border: 2px solid rgb(0, 0, 64); padding: 20px;">
       <h2>Retirar Vehículo</h2>
       <form @submit.prevent="submitForm">
         <div>
@@ -30,3 +30,14 @@
     }
   }
   </script>
+<style>
+
+.form-container {
+  margin-top: 30px;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 2%;
+}
+
+</style>
