@@ -3,10 +3,10 @@
     <h2>Registrar Vehículo</h2>
     <form @submit.prevent="submitForm" style="margin: 0px;">
       <div class="form-group">
-        <label for="licensePlate" class="label">Placa:</label>
-        <input type="text" id="licensePlate" v-model="vehicle.licensePlate" required @input="validateLicensePlate"
-          class="input" maxlength="6">
-        <p v-if="licensePlateError" class="error">La placa debe tener el formato XXXNNN<br> X es un caracter alfabético y
+        <label for="license_plate" class="label">Placa:</label>
+        <input type="text" id="license_plate" v-model="vehicle.license_plate" required @input="validateLicensePlate"
+          class="input" maxlength="7">
+        <p v-if="licensePlateError" class="error">La placa debe tener el formato XXX-NNN<br> X es un caracter alfabético y
           N es un número.</p>
       </div>
       <div class="form-group">
@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       vehicle: {
-        licensePlate: '',
+        license_plate: '',
         color: '',
         state: 'ACTIVO',
         carPhoto: null
@@ -76,26 +76,47 @@ export default {
       this.licensePlateError = !regex.test(this.vehicle.licensePlate);
     },
     async submitForm() {
-      if (
-        !this.vehicle.licensePlate ||
-        !this.vehicle.color ||
-        !this.vehicle.carPhoto
-      ) {
-        this.errorMessage = 'Todos los datos del vehículo son obligatorios';
-        this.successMessage = ''; // Limpiar el mensaje de éxito si está presente
-        return;
-      }
-      try {
-        const response = await axios.post('http://localhost:3000/cars', this.vehicle);
-        console.log('Respuesta del servidor:', response.data);
-        this.successMessage = 'El vehículo se registró correctamente'; // Mostrar mensaje de éxito
-        this.errorMessage = ''; // Limpiar el mensaje de error si está presente
-      } catch (error) {
-        console.error('Error al enviar los datos del vehículo:', error);
-        this.errorMessage = 'Hubo un error al registrar el vehículo'; // Mostrar mensaje de error
-        this.successMessage = ''; // Limpiar el mensaje de éxito si está presente
-      }
-    }
+  // Verificar si todos los campos están llenos
+  if (
+    !this.vehicle.license_plate || // Verifica si la placa está vacía
+    !this.vehicle.color ||
+    !this.vehicle.carPhoto
+  ) {
+    this.errorMessage = 'Todos los datos del vehículo son obligatorios';
+    this.successMessage = ''; // Limpiar el mensaje de éxito si está presente
+    return;
+  }
+
+  // Validar la placa ingresada
+  const plateParts = this.vehicle.license_plate.split('-');
+  if (plateParts.length !== 2 || plateParts[0].length !== 3 || plateParts[1].length !== 3) {
+    this.errorMessage = 'La placa debe tener el formato XXX-NNN (3 letras seguidas de un guion y 3 números)';
+    this.successMessage = ''; // Limpiar el mensaje de éxito si está presente
+    return;
+  }
+
+  // Validar que las letras estén en mayúsculas y los números sean válidos
+  const regexLetters = /^[A-Z]{3}$/;
+  const regexNumbers = /^[0-9]{3}$/;
+  if (!regexLetters.test(plateParts[0]) || !regexNumbers.test(plateParts[1])) {
+    this.errorMessage = 'La placa debe tener el formato XXX-NNN (3 letras seguidas de un guion y 3 números)';
+    this.successMessage = ''; // Limpiar el mensaje de éxito si está presente
+    return;
+  }
+
+  // Si todo es válido, enviar la solicitud al backend para registrar el vehículo
+  try {
+    const response = await axios.post('http://localhost:3000/cars', this.vehicle);
+    console.log('Respuesta del servidor:', response.data);
+    this.successMessage = 'El vehículo se registró correctamente'; // Mostrar mensaje de éxito
+    this.errorMessage = ''; // Limpiar el mensaje de error si está presente
+  } catch (error) {
+    console.error('Error al enviar los datos del vehículo:', error);
+    this.errorMessage = 'Hubo un error al registrar el vehículo'; // Mostrar mensaje de error
+    this.successMessage = ''; // Limpiar el mensaje de éxito si está presente
+  }
+}
+
     ,
   }
 }
