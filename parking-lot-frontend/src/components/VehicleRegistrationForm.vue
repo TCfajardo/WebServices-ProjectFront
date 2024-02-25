@@ -15,7 +15,8 @@
       </div>
       <div class="form-group">
         <label for="carPhoto" class="label">Foto del vehículo:</label>
-        <input type="file" id="carPhoto" @change="validateCarPhoto" required class="input">
+        <input type="file" id="carPhoto" @change="validateCarPhoto" ref="carPhoto" name="image_path" required class="input">
+
       </div>
       <div style="text-align: center; margin-top: 20px;">
         <button type="submit" class="button">Registrar</button>
@@ -33,12 +34,10 @@ export default {
       vehicle: {
         license_plate: '',
         color: '',
-        state: 'ACTIVO',
-        carPhoto: null
+        state: 'ACTIVO'
       },
-      
-      errorMessage: '', // Inicialización de errorMessage
-      successMessage: '', // Inicialización de successMessage
+      errorMessage: '',
+      successMessage: '',
       colors: [
         { id: 1, name: 'Rojo' },
         { id: 2, name: 'Azul' },
@@ -59,19 +58,14 @@ export default {
         { id: 17, name: 'Celeste' },
         { id: 18, name: 'Marrón' },
         { id: 19, name: 'Violeta' },
-
       ]
     };
   },
   methods: {
-    handleFileChange(event) {
-      this.vehicle.carPhoto = event.target.files[0];
-    },
     validateLicensePlate() {
       this.vehicle.license_plate = this.vehicle.license_plate.slice(0, 3).toUpperCase() + this.vehicle.license_plate.slice(3);
       const regex = /^[A-Z]{3}-[0-9]{3}$/;
-      this.licensePlateError = !regex.test(this.vehicle.licensePlate);
-
+      this.licensePlateError = !regex.test(this.vehicle.license_plate);
     },
     validateCarPhoto(event) {
       const file = event.target.files[0];
@@ -79,53 +73,39 @@ export default {
       if (!allowedExtensions.exec(file.name)) {
         this.errorMessage = 'El archivo seleccionado no es una imagen válida. Por favor, selecciona un archivo de imagen.';
         this.successMessage = '';
-        event.target.value = ''; 
-        this.vehicle.carPhoto = null; 
+        event.target.value = '';
       } else {
         this.errorMessage = '';
-        this.vehicle.carPhoto = file;
+        this.vehicle.image_path = file;
       }
     },
     async submitForm() {
-      if (
-        !this.vehicle.license_plate || 
-        !this.vehicle.color ||
-        !this.vehicle.carPhoto
-      ) {
-        this.errorMessage = 'Todos los datos del vehículo son obligatorios';
-        this.successMessage = '';
-        return;
-      }
-
-      const plateParts = this.vehicle.license_plate.split('-');
-      if (plateParts.length !== 2 || plateParts[0].length !== 3 || plateParts[1].length !== 3) {
-        this.errorMessage = 'La placa debe tener el formato XXX-NNN (3 letras seguidas de un guion y 3 números)';
-        this.successMessage = ''; 
-        return;
-      }
-      const regexLetters = /^[A-Z]{3}$/;
-      const regexNumbers = /^[0-9]{3}$/;
-      if (!regexLetters.test(plateParts[0]) || !regexNumbers.test(plateParts[1])) {
-        this.errorMessage = 'La placa debe tener el formato XXX-NNN (3 letras seguidas de un guion y 3 números)';
-        this.successMessage = ''; 
-        return;
-      }
-
-      try {
-        const response = await this.$axios.post('/cars', this.vehicle);
-        console.log('Respuesta del servidor:', response.data);
-        this.successMessage = 'El vehículo se registró correctamente';
-        this.errorMessage = ''; 
-      } catch (error) {
-        console.error('Error al enviar los datos del vehículo:', error);
-        this.errorMessage = 'Hubo un error al registrar el vehículo';
-        this.successMessage = '';
-      }
-    }
-
-    ,
+  if (!this.vehicle.license_plate || !this.vehicle.color || !this.$refs.carPhoto.files[0]) {
+    this.errorMessage = 'Todos los datos del vehículo son obligatorios';
+    this.successMessage = '';
+    return;
   }
+
+  const formData = new FormData();
+  formData.append('license_plate', this.vehicle.license_plate); 
+  formData.append('color', this.vehicle.color)
+  formData.append('image_path', this.$refs.carPhoto.files[0]); 
+  
+
+   try {
+    const response = await this.$axios.post('/cars', formData);
+    console.log('Respuesta del servidor:', response.data);
+    this.successMessage = 'El vehículo se registró correctamente';
+    this.errorMessage = '';
+  } catch (error) {
+    console.error('Error al enviar los datos del vehículo:', error);
+    this.errorMessage = 'Hubo un error al registrar el vehículo';
+    this.successMessage = '';
+  }
+},
 }
+}
+
 </script>
 
 <style scoped>
@@ -133,7 +113,6 @@ export default {
   display: inline-block;
   width: 100px;
   text-align: left;
-
 }
 
 .input {
