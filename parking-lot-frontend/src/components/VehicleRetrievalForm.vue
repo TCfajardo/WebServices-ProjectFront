@@ -109,5 +109,11 @@ input {
     text-align: center; /* Centra el texto horizontalmente */
 }
 
+.message {
+  font-size: 14px; 
+  margin-top: 10px;
+  color: rgb(187, 210, 131); 
+}
+
 
 </style>

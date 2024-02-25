@@ -99,7 +99,7 @@ button:hover {
   margin-left: auto;
   margin-right: auto;
   border-radius: 2%;
-  margin-bottom: 35px;
+  margin-bottom: 45px;
 }
 
 .main-content {

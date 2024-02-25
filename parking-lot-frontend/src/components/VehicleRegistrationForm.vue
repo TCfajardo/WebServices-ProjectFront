@@ -126,6 +126,13 @@ export default {
   font-size: 11px;
 }
 
+.success {
+  width: 300px;
+  font-size: 14px; 
+  text-align: center;
+  color: rgb(72, 124, 82);
+}
+
 .form-container {
   margin-top: 25px;
   width: 100%;
