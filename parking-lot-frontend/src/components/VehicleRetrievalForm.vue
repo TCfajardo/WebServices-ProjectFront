@@ -1,5 +1,5 @@
 <template>
-  <div class="form-container slide-down" style="border: 2px solid rgb(0, 0, 64); padding: 20px;">
+  <div class="form-container slide-down" style="padding: 20px;">
     <h2>Retirar Vehículo</h2>
     <form @submit.prevent="submitForm">
       <div>
@@ -64,11 +64,11 @@ export default {
 
 <style>
 .form-container {
-  margin-top: 30px;
-  width: 70%;
+  margin-top: 25px;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
-  border-radius: 2%;
+  border-radius: 10%;
 }
 
 label {

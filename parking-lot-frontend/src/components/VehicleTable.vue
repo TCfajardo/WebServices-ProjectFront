@@ -74,7 +74,7 @@ export default {
 
 <style scoped>
 .table-container {
-    width: 90%;
+    width: 100%;
     margin: auto;
 }
 
@@ -92,6 +92,7 @@ td {
 }
 
 th {
-    background-color: #f2f2f2;
+    background-color: #1c0043;
+    color: rgb(255, 255, 255);
 }
 </style>

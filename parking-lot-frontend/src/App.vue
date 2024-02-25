@@ -73,6 +73,14 @@ button:hover {
 } 
 
 .form-container {
-  margin-top: 20px;
+  background-color: #f7f8fc;
+  width: 60%;
+  .form-container {
+  margin-top: 25px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 2%;
+}
 }
 </style>
