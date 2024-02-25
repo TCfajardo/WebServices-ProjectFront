@@ -7,6 +7,8 @@
                     <th>Color</th>
                     <th>Hora de entrada</th>
                     <th>Estado</th>
+                    <th>Imagen</th>
+                    <th>URL de la imagen</th>
                 </tr>
             </thead>
             <tbody>
@@ -14,7 +16,13 @@
                     <td>{{ vehicle.license_plate }}</td>
                     <td>{{ vehicle.color }}</td>
                     <td>{{ vehicle.entryTime }}</td>
-                    <td>{{ vehicle.state ? 'Activo' : 'Retirado' }}</td>
+                    <td>{{ vehicle.state }}</td>
+                    <td>
+                        <img :src="vehicle.image_url" alt="Imagen del vehículo" style="max-width: 100px; max-height: 100px;">
+                    </td>
+                    <td>
+                        <a :href="vehicle.image_url" target="_blank">{{ vehicle.image_url }}</a>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -55,7 +63,7 @@ export default {
 
 <style scoped>
 .table-container {
-    width: 70%;
+    width: 90%;
     margin: auto;
 }
 

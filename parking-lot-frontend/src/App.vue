@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+
 import VehicleRegistrationForm from './components/VehicleRegistrationForm.vue';
 import VehicleRetrievalForm from './components/VehicleRetrievalForm.vue';
 import VehicleTable from './components/VehicleTable.vue';
@@ -35,17 +35,7 @@ export default {
       showRetrievalForm: false,
       showTableForm: false
     }
-  }, 
-  methods: {
-  async getVehicles() {
-    try {
-      const response = await axios.get('http://localhost:3000/cars');
-      this.vehicles = response.data;
-    } catch (error) {
-      console.error('Error al obtener los vehículos:', error);
-    }
   }
-}
 
 }
 </script>
@@ -57,7 +47,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #00152a;
-  margin-top: 60px;
+  margin-top: 30px;
   background-color: #ffffff;
 }
 

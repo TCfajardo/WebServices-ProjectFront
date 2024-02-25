@@ -137,7 +137,7 @@ export default {
 }
 
 .input {
-  width: calc(100% - 290px);
+  width: calc(100% - 420px);
   margin-left: 10px;
 }
 
