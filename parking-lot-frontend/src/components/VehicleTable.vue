@@ -15,7 +15,7 @@
                 <tr v-for="(vehicle, index) in vehiclesLocal" :key="index">
                     <td>{{ vehicle.license_plate }}</td>
                     <td>{{ vehicle.color }}</td>
-                    <td>{{ vehicle.entryTime }}</td>
+                    <td>{{ formatEntryTime(vehicle.entryTime) }}</td>
                     <td>{{ vehicle.state }}</td>
                     <td>
                         <img :src="vehicle.image_url" alt="Imagen del vehículo" style="max-width: 100px; max-height: 100px;">
@@ -53,6 +53,17 @@ export default {
             } catch (error) {
                 console.error('Error al obtener los vehículos:', error);
             }
+        },
+        formatEntryTime(entryTime) {
+            const date = new Date(entryTime);
+            const options = {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            return date.toLocaleDateString('es-ES', options);
         }
     },
     mounted() {
