@@ -3,64 +3,50 @@
     <h1>Parqueadero NN</h1>
     <img src="https://img.freepik.com/vector-premium/diseno-plantilla-logotipo-coche-estacionamiento_20029-1033.jpg" alt="Carro" class="car-image">
     <nav>
-      <button @click="showRegistrationForm = true; showRetrievalForm = false">Registrar vehículo</button>
-      <button @click="showRetrievalForm = true; showRegistrationForm = false">Retirar vehículo</button>
-      <button @click="getVehicles">Obtener vehículos</button>
+      <button @click="showRegistrationForm = true; showRetrievalForm = false; showTableForm = false">Registrar vehículo</button>
+      <button @click="showRetrievalForm = true; showRegistrationForm = false; showTableForm = false">Retirar vehículo</button>
+      <button @click="showTableForm = true; showRegistrationForm = false; showRetrievalForm = false">Obtener vehículos</button>
     </nav>
 
-    <div class="form-container" v-if="showRegistrationForm || showRetrievalForm">
+    <div class="form-container">
       <vehicle-registration-form v-if="showRegistrationForm" @close="showRegistrationForm = false"></vehicle-registration-form>
       <vehicle-retrieval-form v-if="showRetrievalForm" @close="showRetrievalForm = false"></vehicle-retrieval-form>
+      <vehicle-table v-if="showTableForm"></vehicle-table>
     </div>
-
-    <table v-if="vehicles.length > 0">
-      <thead>
-        <tr>
-          <th>Placa</th>
-          <th>Color</th>
-          <th>Hora de entrada</th>
-          <th>Estado</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(vehicle, index) in vehicles" :key="index">
-          <td>{{ vehicle.license_plate }}</td>
-          <td>{{ vehicle.color }}</td>
-          <td>{{ vehicle.entryTime }}</td>
-          <td>{{ vehicle.state ? 'Activo' : 'Retirado' }}</td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 import VehicleRegistrationForm from './components/VehicleRegistrationForm.vue';
 import VehicleRetrievalForm from './components/VehicleRetrievalForm.vue';
+import VehicleTable from './components/VehicleTable.vue';
 
 export default {
   name: 'App',
   components: {
     VehicleRegistrationForm,
-    VehicleRetrievalForm
+    VehicleRetrievalForm,
+    VehicleTable
   },
   data() {
     return {
       showRegistrationForm: false,
       showRetrievalForm: false,
-      vehicles: []
+      showTableForm: false
     }
-  },
+  }, 
   methods: {
-    async getVehicles() {
-      try {
-        const response = await this.$axios.get('/cars');
-        this.vehicles = response.data;
-      } catch (error) {
-        console.error('Error al obtener los vehículos:', error);
-      }
+  async getVehicles() {
+    try {
+      const response = await axios.get('http://localhost:3000/cars');
+      this.vehicles = response.data;
+    } catch (error) {
+      console.error('Error al obtener los vehículos:', error);
     }
   }
+}
+
 }
 </script>
 
@@ -96,19 +82,7 @@ button:hover {
   margin-top: -15px;
 } 
 
-table {
-  width: 70%;
-  margin: auto;
-  border-collapse: collapse;
-}
-
-th, td {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-th {
-  background-color: #f2f2f2;
+.form-container {
+  margin-top: 20px;
 }
 </style>

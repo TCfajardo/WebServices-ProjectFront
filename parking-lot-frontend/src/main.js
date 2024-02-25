@@ -17,7 +17,7 @@ app.config.globalProperties.$axios = axios; // Agrega Axios a las propiedades gl
 app.mixin({
   data() {
     return {
-      vehicles: ref([]) // Utiliza un ref para almacenar la lista de vehículos
+      vehicleslist: ref([]) 
     };
   },
   methods: {

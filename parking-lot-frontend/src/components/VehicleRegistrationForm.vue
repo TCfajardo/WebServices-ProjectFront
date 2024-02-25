@@ -27,8 +27,6 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   data() {
     return {
@@ -114,7 +112,7 @@ export default {
       }
 
       try {
-        const response = await axios.post('http://localhost:3000/cars', this.vehicle);
+        const response = await this.$axios.post('/cars', this.vehicle);
         console.log('Respuesta del servidor:', response.data);
         this.successMessage = 'El vehículo se registró correctamente';
         this.errorMessage = ''; 
