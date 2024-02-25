@@ -73,12 +73,12 @@ export default {
 
 label {
   display: inline-block;
-  width: 170px;
+  width: 140px;
   text-align: left;
 }
 
 input {
-  width: calc(100% - 570px);
+  width: calc(100% - 460px);
   margin-left: 10px;
 }
 

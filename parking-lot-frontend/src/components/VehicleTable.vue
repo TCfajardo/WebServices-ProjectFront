@@ -6,6 +6,7 @@
                     <th>Placa</th>
                     <th>Color</th>
                     <th>Hora de entrada</th>
+                    <th>Hora de salida</th>
                     <th>Estado</th>
                     <th>Imagen</th>
                     <th>URL de la imagen</th>
@@ -16,6 +17,7 @@
                     <td>{{ vehicle.license_plate }}</td>
                     <td>{{ vehicle.color }}</td>
                     <td>{{ formatEntryTime(vehicle.entryTime) }}</td>
+                    <td>{{ vehicle.exitTime !== null? formatExitTime(vehicle.exitTime) : '-' }}</td>
                     <td>{{ vehicle.state }}</td>
                     <td>
                         <img :src="vehicle.image_url" alt="Imagen del vehículo" style="max-width: 100px; max-height: 100px;">
@@ -64,6 +66,21 @@ export default {
                 minute: '2-digit'
             };
             return date.toLocaleDateString('es-ES', options);
+        },
+        formatExitTime(exitTime) {
+            if (exitTime === 0) {
+                return '-';
+            } else {
+                const date = new Date(exitTime);
+                const options = {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                };
+                return date.toLocaleDateString('es-ES', options);
+            }
         }
     },
     mounted() {
