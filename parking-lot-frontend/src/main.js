@@ -10,9 +10,9 @@ import App from './App.vue';
 const app = createApp(App);
 
 // Configura Axios (opcional)
-axios.defaults.baseURL = 'http://localhost:3000'; // Ajusta la URL base según la configuración de tu servidor
+axios.defaults.baseURL = 'http://localhost:3000';
 
-app.config.globalProperties.$axios = axios; // Agrega Axios a las propiedades globales de tu aplicación
+app.config.globalProperties.$axios = axios;
 
 app.mixin({
   data() {

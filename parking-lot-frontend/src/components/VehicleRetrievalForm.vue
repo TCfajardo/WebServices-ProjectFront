@@ -3,7 +3,7 @@
     <h2>Retirar Vehículo</h2>
     <form @submit.prevent="submitForm">
       <div>
-        <label for="licensePlate">Número de placa:</label>
+        <label for="licensePlate">Placa:</label>
         <input type="text" id="licensePlate" v-model="vehicle.licensePlate" required>
       </div>
       <div class="classButton">
@@ -71,14 +71,14 @@ export default {
   border-radius: 10%;
 }
 
-label {
+.label {
   display: inline-block;
-  width: 140px;
+  width: 20%;
   text-align: left;
 }
 
-input {
-  width: calc(100% - 460px);
+.input {
+  width: calc(100% - 70%);
   margin-left: 10px;
 }
 

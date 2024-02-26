@@ -111,12 +111,12 @@ export default {
 <style scoped>
 .label {
   display: inline-block;
-  width: 160px;
+  width: 20%;
   text-align: left;
 }
 
 .input {
-  width: calc(100% - 700px);
+  width: calc(100% - 70%);
   margin-left: 10px;
 }
 
