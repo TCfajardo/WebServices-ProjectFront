@@ -15,7 +15,8 @@
       </div>
       <div class="form-group">
         <label for="carPhoto" class="label">Foto del vehículo:</label>
-        <input type="file" id="carPhoto" @change="validateCarPhoto" ref="carPhoto" name="image_path" required class="input">
+        <input type="file" id="carPhoto" @change="validateCarPhoto" ref="carPhoto" name="image_path" required
+          class="input">
 
       </div>
       <div style="text-align: center; margin-top: 20px;">
@@ -52,20 +53,26 @@ export default {
         { id: 11, name: 'Café' },
         { id: 12, name: 'Naranja' },
         { id: 13, name: 'Morado' },
-        { id: 14, name: 'Rosa' },
-        { id: 15, name: 'Turquesa' },
         { id: 16, name: 'Beige' },
         { id: 17, name: 'Celeste' },
         { id: 18, name: 'Marrón' },
-        { id: 19, name: 'Violeta' },
       ]
     };
   },
   methods: {
     validateLicensePlate() {
-      this.vehicle.license_plate = this.vehicle.license_plate.slice(0, 3).toUpperCase() + this.vehicle.license_plate.slice(3);
+      // Convierte las letras ingresadas a mayúsculas
+      this.vehicle.license_plate = this.vehicle.license_plate.toUpperCase();
+
+      // Verifica si la placa tiene el formato correcto (3 letras - 3 números)
       const regex = /^[A-Z]{3}-[0-9]{3}$/;
-      this.licensePlateError = !regex.test(this.vehicle.license_plate);
+
+      if (!regex.test(this.vehicle.license_plate)) {
+        this.errorMessage = 'El formato de la placa es incorrecto. Debe ser ABC-123.';
+        this.successMessage = '';
+      } else {
+        this.errorMessage = ''; // Limpia el mensaje de error si la placa es válida
+      }
     },
     validateCarPhoto(event) {
       const file = event.target.files[0];
@@ -80,30 +87,30 @@ export default {
       }
     },
     async submitForm() {
-  if (!this.vehicle.license_plate || !this.vehicle.color || !this.$refs.carPhoto.files[0]) {
-    this.errorMessage = 'Todos los datos del vehículo son obligatorios';
-    this.successMessage = '';
-    return;
-  }
+      if (!this.vehicle.license_plate || !this.vehicle.color || !this.$refs.carPhoto.files[0]) {
+        this.errorMessage = 'Todos los datos del vehículo son obligatorios';
+        this.successMessage = '';
+        return;
+      }
 
-  const formData = new FormData();
-  formData.append('license_plate', this.vehicle.license_plate); 
-  formData.append('color', this.vehicle.color)
-  formData.append('image_path', this.$refs.carPhoto.files[0]); 
-  
+      const formData = new FormData();
+      formData.append('license_plate', this.vehicle.license_plate);
+      formData.append('color', this.vehicle.color)
+      formData.append('image_path', this.$refs.carPhoto.files[0]);
 
-   try {
-    const response = await this.$axios.post('/cars', formData);
-    console.log('Respuesta del servidor:', response.data);
-    this.successMessage = 'El vehículo se registró correctamente';
-    this.errorMessage = '';
-  } catch (error) {
-    console.error('Error al enviar los datos del vehículo:', error);
-    this.errorMessage = 'Hubo un error al registrar el vehículo';
-    this.successMessage = '';
+
+      try {
+        const response = await this.$axios.post('/cars', formData);
+        console.log('Respuesta del servidor:', response.data);
+        this.successMessage = 'El vehículo se registró correctamente';
+        this.errorMessage = '';
+      } catch (error) {
+        console.error('Error al enviar los datos del vehículo:', error);
+        this.errorMessage = 'Hubo un error al registrar el vehículo, no fue posible enviar los datos al servidor.';
+        this.successMessage = '';
+      }
+    },
   }
-},
-}
 }
 
 </script>
@@ -128,7 +135,7 @@ export default {
 
 .success {
   width: 300px;
-  font-size: 14px; 
+  font-size: 14px;
   text-align: center;
   color: rgb(72, 124, 82);
 }
