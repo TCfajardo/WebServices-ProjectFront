@@ -104,11 +104,21 @@ export default {
         console.log('Respuesta del servidor:', response.data);
         this.successMessage = 'El vehículo se registró correctamente';
         this.errorMessage = '';
-      } catch (error) {
+    } catch (error) {
         console.error('Error al enviar los datos del vehículo:', error);
-        this.errorMessage = 'Hubo un error al registrar el vehículo, no fue posible enviar los datos al servidor.';
+        if (error.response.status === 400) {
+            if (error.response.data.error === 'Ya existe un carro con esta placa en el parqueadero.') {
+                this.errorMessage = 'No se puede ingresar esta placa, ya se encuentra registrada. Por favor, ingrese otra.';
+            } else if (error.response.data.error === 'Este carro ya ha sido retirado y no puede ser retirado nuevamente.') {
+                this.errorMessage = 'Este carro ya ha sido retirado y no puede ser retirado nuevamente.';
+            } else {
+                this.errorMessage = 'Hubo un error al registrar el vehículo, no fue posible enviar los datos al servidor.';
+            }
+        } else {
+            this.errorMessage = 'Hubo un error al registrar el vehículo, no fue posible enviar los datos al servidor.';
+        }
         this.successMessage = '';
-      }
+    }
     },
   }
 }
