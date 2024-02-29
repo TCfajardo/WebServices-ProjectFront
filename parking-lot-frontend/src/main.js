@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-// @ts-ignore
+
 window.__VUE_PROD_DEVTOOLS__ = false;
 window.__VUE_PROD_HYDRATION_MISMATCH_DETAILS__ = false;
 
@@ -9,7 +8,8 @@ import App from './App.vue';
 
 const app = createApp(App);
 
-axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.baseURL = 'http://192.168.80.10:7000';
+
 
 app.config.globalProperties.$axios = axios;
 
