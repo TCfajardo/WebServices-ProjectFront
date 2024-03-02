@@ -28,6 +28,8 @@
                 </tr>
             </tbody>
         </table>
+        <p v-else-if="error">{{ errorMessage }}</p>
+
         <p v-else>No hay vehículos registrados.</p>
     </div>
 </template>
@@ -43,7 +45,12 @@ export default {
     },
     data() {
         return {
-            vehiclesLocal: this.vehicles
+            
+            vehiclesLocal: this.vehicles,
+            loading: true,
+            error: false,
+            errorMessage: 'No fue posible conectar con el servicio ahora, intenta más tarde.'
+        
         }
     },
     methods: {
@@ -51,9 +58,12 @@ export default {
             try {
                 const response = await this.$axios.get('/cars');
                 this.vehiclesLocal = response.data;
-                this.$emit('update:vehicles', response.data); 
+                this.$emit('update:vehicles', response.data);
             } catch (error) {
                 console.error('Error al obtener los vehículos:', error);
+                this.error = true;
+            } finally {
+                this.loading = false;
             }
         },
         formatEntryTime(entryTime) {
