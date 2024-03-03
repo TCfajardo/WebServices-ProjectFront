@@ -6,25 +6,23 @@
                     <th>Placa</th>
                     <th>Color</th>
                     <th>Hora de entrada</th>
-                    <th>Hora de salida</th>
+                    
                     <th>Estado</th>
                     <th>Imagen</th>
-                    <th>URL de la imagen</th>
+                    
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(vehicle, index) in vehiclesLocal" :key="index">
                     <td>{{ vehicle.license_plate }}</td>
                     <td>{{ vehicle.color }}</td>
-                    <td>{{ formatEntryTime(vehicle.entryTime) }}</td>
-                    <td>{{ vehicle.exitTime !== null? formatExitTime(vehicle.exitTime) : '-' }}</td>
+                    <td>{{ formatEntryTime(vehicle.entrytime) }}</td>
+                    
                     <td>{{ vehicle.state }}</td>
                     <td>
-                        <img :src="vehicle.image_url" alt="Imagen del vehículo" style="max-width: 100px; max-height: 100px;">
+                        <img :src="vehicle.imageurl" alt="Imagen del vehículo" style="max-width: 100px; max-height: 100px;">
                     </td>
-                    <td>
-                        <a :href="vehicle.image_url" target="_blank">{{ vehicle.image_url }}</a>
-                    </td>
+                    
                 </tr>
             </tbody>
         </table>
@@ -66,32 +64,33 @@ export default {
                 this.loading = false;
             }
         },
-        formatEntryTime(entryTime) {
-            const date = new Date(entryTime);
-            const options = {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit'
-            };
-            return date.toLocaleDateString('es-ES', options);
-        },
-        formatExitTime(exitTime) {
-            if (exitTime === 0) {
-                return '-';
-            } else {
-                const date = new Date(exitTime);
-                const options = {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                };
-                return date.toLocaleDateString('es-ES', options);
-            }
-        }
+        formatEntryTime(entrytime) {
+    const date = new Date(entrytime);
+    const options = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+    };
+    return date.toLocaleString('es-ES', options);
+},
+formatExitTime(exittime) {
+    if (exittime === 0 || exittime === null) {
+        return '-';
+    } else {
+        const date = new Date(exittime);
+        const options = {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+        };
+        return date.toLocaleString('es-ES', options);
+    }
+}
+
     },
     mounted() {
         this.getVehicles();
