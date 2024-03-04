@@ -26,7 +26,8 @@ export default {
   data() {
     return {
       vehicle: {
-        licensePlate: ''
+        licensePlate: '',
+        error: null
       },
       message: '',
       licensePlates: []
@@ -47,16 +48,22 @@ export default {
       }
     },
     async fetchLicensePlates() {
-      try {
-        const response = await this.$axios.get('/cars/license-plates');
-        this.licensePlates = response.data; // Actualizar la lista de placas
-      } catch (error) {
-        console.error('Error al obtener las placas:', error);
-      }
+  try {
+    const response = await this.$axios.get('http://localhost:7000/cars/license-plates');
+    this.licensePlates = response.data;
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      console.error('No hay vehículos activos disponibles en este momento.');
+      this.message = 'No hay vehículos activos disponibles en este momento.';
+    } else {
+      console.error('Ocurrió un error al cargar las placas de los vehículos activos:', error);
+      this.message = 'Ocurrió un error al cargar las placas de los vehículos activos, intentalo más tarde.';
     }
+  }
+}
+
   },
   mounted() {
-    // Llamar al método para obtener las placas cuando el componente se monte
     this.fetchLicensePlates();
   }
 }
