@@ -35,21 +35,21 @@ export default {
   },
   methods: {
     async submitForm() {
-      try {
-        const response = await this.$axios.patch('/cars', { license_plate: this.vehicle.licensePlate });
-        console.log('Respuesta del servidor:', response.data);
-        // Actualizar el mensaje para mostrar al usuario
-        this.message = `El carro de placa ${this.vehicle.licensePlate} ha salido del parqueadero`;
-        // Llamar al método para obtener las placas después de retirar un carro
-        this.fetchLicensePlates();
-      } catch (error) {
-        console.error('Error al retirar el vehículo:', error);
-        this.message = 'Hubo un error al retirar el vehículo. Por favor, inténtalo de nuevo.';
-      }
-    },
+  try {
+    const response = await this.$axios.patch('/cars', { license_plate: this.vehicle.licensePlate });
+    console.log('Respuesta del servidor:', response.data);
+    // Actualizar el mensaje para mostrar al usuario
+    this.message = `El carro de placa ${this.vehicle.licensePlate} ha salido del parqueadero`;
+    // Llamar al método para obtener las placas después de retirar un carro
+    this.fetchLicensePlates(); // <-- Actualizar la lista de placas después de retirar un carro
+  } catch (error) {
+    console.error('Error al retirar el vehículo:', error);
+    this.message = 'Hubo un error al retirar el vehículo. Por favor, inténtalo de nuevo.';
+  }
+},
     async fetchLicensePlates() {
   try {
-    const response = await this.$axios.get('http://localhost:7000/cars/license-plates');
+    const response = await this.$axios.get('/cars/license-plates');
     this.licensePlates = response.data;
   } catch (error) {
     if (error.response && error.response.status === 404) {
@@ -57,7 +57,7 @@ export default {
       this.message = 'No hay vehículos activos disponibles en este momento.';
     } else {
       console.error('Ocurrió un error al cargar las placas de los vehículos activos:', error);
-      this.message = 'Ocurrió un error al cargar las placas de los vehículos activos, intentalo más tarde.';
+      this.message = 'Ocurrió un error al cargar las placas de los vehículos activos, intenta más tarde.';
     }
   }
 }
