@@ -8,8 +8,7 @@ import App from './App.vue';
 
 const app = createApp(App);
 
-axios.defaults.baseURL = 'http://localhost:3000';
-
+axios.defaults.baseURL = process.env.VUE_APP_API_URL;
 
 app.config.globalProperties.$axios = axios;
 
