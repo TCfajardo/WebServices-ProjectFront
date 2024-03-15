@@ -8,7 +8,8 @@ import App from './App.vue';
 
 const app = createApp(App);
 
-axios.defaults.baseURL = 'http://10.4.72.123:3000';
+axios.defaults.baseURL = 'http://localhost:3000';
+console.log('Balanceador ',axios.defaults.baseURL)
 
 app.config.globalProperties.$axios = axios;
 
@@ -19,15 +20,6 @@ app.mixin({
     };
   },
   methods: {
-    async getVehicles() {
-      try {
-        const response = await this.$axios.get('/cars');
-        this.vehicles = response.data; // Asigna la respuesta del servidor a la variable vehicles
-      } catch (error) {
-        console.error('Error al obtener los vehículos:', error);
-        // Maneja el error de alguna manera, por ejemplo, mostrando un mensaje al usuario
-      }
-    }
   }
 });
 
